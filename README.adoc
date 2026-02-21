@@ -249,3 +249,8 @@ All source files include SPDX license headers.
 NAFA is a living project. Every commit, annotation, and accessibility improvement is a step toward calmer, more inclusive travel.
 
 Contributions welcome – see link:CONTRIBUTING.md[CONTRIBUTING.md].
+
+
+== Architecture
+
+See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.
