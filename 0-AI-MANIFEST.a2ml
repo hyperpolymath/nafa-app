@@ -4,7 +4,7 @@
 
 ## WHAT IS THIS?
 
-This is the AI manifest for **nafa-app-ambient**. It declares:
+This is the AI manifest for **nafa-app**. It declares:
 - Canonical file locations (where things MUST be, and nowhere else)
 - Critical invariants (rules that must NEVER be violated)
 - Repository structure and organization
@@ -44,19 +44,19 @@ Bot-specific instructions for:
 2. **Single source of truth** - `.machine_readable/` is authoritative
 3. **No stale metadata** - If root SCMs exist, they are OUT OF DATE
 4. **License consistency** - All code PMPL-1.0-or-later unless platform requires MPL-2.0
-5. **Author attribution** - Always "Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"
+5. **Author attribution** - Always "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
 
 ## REPOSITORY STRUCTURE
-
-<!-- CUSTOMIZE THIS SECTION FOR YOUR REPO -->
 
 This repo contains:
 
 ```
-nafa-app-ambient/
+nafa-app/
 ├── 0-AI-MANIFEST.a2ml         # THIS FILE (start here)
-├── README.md                   # Project overview
-├── [your source files]         # Main code
+├── README.adoc                 # Project overview
+├── client/                     # ReScript SPA (TEA pattern)
+├── server/                     # Deno HTTP server
+├── shared/                     # Shared domain types
 ├── .machine_readable/          # SCM files (6 files)
 │   ├── STATE.scm
 │   ├── META.scm
@@ -110,7 +110,7 @@ After reading this file, demonstrate understanding by stating:
 ## META
 
 - **Format Version:** 1.0.0
-- **Created:** [DATE]
-- **Maintained By:** [YOUR-NAME/ORG]
+- **Created:** 2025-01-03
+- **Maintained By:** Jonathan D.A. Jewell (hyperpolymath)
 - **License:** PMPL-1.0-or-later
 - **Protocol:** https://github.com/hyperpolymath/0-ai-gatekeeper-protocol

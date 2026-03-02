@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
-// SPDX-FileCopyrightText: 2025 hyperpolymath
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 module JourneyView = Page_JourneyView
 module Annotate = Page_Annotate

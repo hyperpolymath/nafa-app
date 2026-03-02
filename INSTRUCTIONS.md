@@ -1,7 +1,8 @@
+<!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
 # Integration Lessons & Requirements
 
 > Cross-session learning from `sanctify-php` security tools integration.
-> Applies to: `cadre-router`, `cadre-tea-router`, `nafa-app-ambient`
+> Applies to: `cadre-router`, `cadre-tea-router`, `nafa-app`
 
 ---
 
@@ -11,7 +12,7 @@
 |------|------------|-----------------|
 | `hyperpolymath/cadre-router` | @hyperpolymath | Publish to JSR, ensure Deno-first |
 | `hyperpolymath/cadre-tea-router` | @hyperpolymath | Create implementation, publish to JSR |
-| `hyperpolymath/nafa-app-ambient` | @hyperpolymath | Consume published packages |
+| `hyperpolymath/nafa-app` | @hyperpolymath | Consume published packages |
 
 ---
 
@@ -100,7 +101,7 @@ Each layer has one job. No layer reaches into another's responsibilities.
 }
 ```
 
-### Example Consumer Usage (nafa-app-ambient)
+### Example Consumer Usage (nafa-app)
 
 ```json
 {
@@ -173,7 +174,7 @@ Each layer has one job. No layer reaches into another's responsibilities.
 
 ---
 
-## Priority Matrix: nafa-app-ambient
+## Priority Matrix: nafa-app
 
 ### MUST (Blockers)
 
@@ -209,7 +210,7 @@ Before considering integration complete:
 - [ ] `deno add @cadre/tea-router` works from fresh project
 - [ ] No `node_modules/` anywhere in consumer project
 - [ ] No `package.json` required for runtime deps
-- [ ] `deno task dev` starts nafa-app-ambient
+- [ ] `deno task dev` starts nafa-app
 - [ ] Route changes work (back/forward, links, programmatic)
 - [ ] Type errors on invalid routes at compile time
 

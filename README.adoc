@@ -1,9 +1,8 @@
 image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
-image:https://img.shields.io/badge/Philosophy-Palimpsest-indigo.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-license"]
 
 
 // SPDX-License-Identifier: PMPL-1.0-or-later
-// SPDX-FileCopyrightText: 2025 hyperpolymath
+// SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 = NAFA – Neurodiverse App for Adventurers
 
@@ -84,7 +83,7 @@ Following the https://hyperpolymath.org[Hyperpolymath Standard]:
 
 [source]
 ----
-nafa-app-ambient/
+nafa-app/
 ├── client/                    # ReScript SPA (TEA pattern)
 │   ├── src/
 │   │   ├── Main.res          # App entry point
@@ -231,24 +230,21 @@ podman run -p 8080:8080 nafa:latest
 
 == Licensing
 
-NAFA is dual-licensed under:
+NAFA is licensed under *PMPL-1.0-or-later* (Palimpsest-MPL License 1.0 or later).
 
-* *MIT* – For maximum flexibility
-* *PMPL-1.0-or-later* – For copyleft protection
-
-All source files include SPDX license headers.
+All source files include SPDX license headers: `SPDX-License-Identifier: PMPL-1.0-or-later`
 
 == Links
 
-* Project: https://github.com/hyperpolymath/nafa-app-ambient
-* Issues: https://github.com/hyperpolymath/nafa-app-ambient/issues
+* Project: https://github.com/hyperpolymath/nafa-app
+* Issues: https://github.com/hyperpolymath/nafa-app/issues
 * Hyperpolymath: https://hyperpolymath.org
 
 == Join the Journey
 
 NAFA is a living project. Every commit, annotation, and accessibility improvement is a step toward calmer, more inclusive travel.
 
-Contributions welcome – see link:CONTRIBUTING.md[CONTRIBUTING.md].
+Contributions welcome -- see link:CONTRIBUTING.adoc[CONTRIBUTING.adoc].
 
 
 == Architecture

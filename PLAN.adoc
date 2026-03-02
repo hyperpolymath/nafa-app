@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
-// SPDX-FileCopyrightText: 2025 hyperpolymath
+// SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 = NAFA Migration Plan: ReScript + Deno MVP
 :toc: left
@@ -58,7 +58,7 @@ NAFA (Neurodiverse App for Adventurers) uses a ReScript + Deno architecture:
 
 [source]
 ----
-nafa-app-ambient/
+nafa-app/
 ├── client/                         # Browser SPA (ReScript)
 │   ├── src/
 │   │   ├── Main.res               # App entry with TEA pattern
@@ -94,7 +94,7 @@ nafa-app-ambient/
 [source]
 ----
 ┌─────────────────────────────────────────────────────────────────┐
-│                        nafa-app-ambient                         │
+│                        nafa-app                                  │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌─────────────┐    ┌──────────────────┐    ┌────────────────┐ │

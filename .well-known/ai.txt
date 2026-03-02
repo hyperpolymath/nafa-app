@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# ai.txt — nafa-app
+# See: https://site.spawning.ai/spawning-ai-txt
+
+# AI Training Policy
+# This project is licensed under PMPL-1.0-or-later which includes
+# ethical use requirements (Section 3) and emotional lineage
+# preservation obligations. AI training on this codebase must comply
+# with the Palimpsest-MPL License.
+
+User-Agent: *
+Disallow: /
+
+# Allowed agents (must comply with PMPL-1.0-or-later Section 3)
+User-Agent: Claude
+Allow: /
+
+User-Agent: GitHub Copilot
+Allow: /

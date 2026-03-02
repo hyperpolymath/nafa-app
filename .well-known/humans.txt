@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# humans.txt — nafa-app
+# See: https://humanstxt.org/
+
+/* TEAM */
+Name: Jonathan D.A. Jewell
+Role: Lead Maintainer
+GitHub: hyperpolymath
+Contact: j.d.a.jewell [at] open.ac.uk
+
+/* SITE */
+Project: NAFA -- Neurodiverse App for Adventurers
+Repository: https://github.com/hyperpolymath/nafa-app
+License: PMPL-1.0-or-later
+Languages: ReScript, JavaScript (Deno), Nickel, Guile Scheme
