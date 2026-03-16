@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "16384433-175a-5cb0-ae69-ac079756e0e0"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "nafa-app"
+prefixed-name = "ap-nafa-app"
+
+[clade]
+primary = "ap"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/nafa-app"
+gitlab = "hyperpolymath/nafa-app"
+bitbucket = "hyperpolymath/nafa-app"
+
+[lineage]
+type = "standalone"
+parent = "NAFA application"
+born = "2026-03-16"
