@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= NAFA – Neurodiverse App for Adventurers — Show Me The Receipts
+:toc:
+:icons: font
+
+The README makes claims. This file backs them up.
+
+[quote, README]
+____
+NAFA is a journey planning app designed to help neurodiverse adventurers navigate public transport and sensory-rich environments with calm, confidence, and symbolic clarity.
+____
+
+== File Map
+
+[cols="1,2"]
+|===
+| Path | What's There
+
+| `test(s)/` | Test suite
+|===
+
+== Questions?
+
+Open an issue or reach out directly — happy to explain anything in more detail.
