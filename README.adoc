@@ -1,252 +1,236 @@
-image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
-
-
-// SPDX-License-Identifier: PMPL-1.0-or-later
-// SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
-
-= NAFA – Neurodiverse App for Adventurers
-
-:toc: left
-:toclevels: 3
+= NAFA
+:toc:
+:toc-placement: preamble
 :icons: font
 
-== Vision
-
-NAFA is a journey planning app designed to help neurodiverse adventurers navigate public transport and sensory-rich environments with calm, confidence, and symbolic clarity.
-
-We encode sensory awareness, accessibility preferences, and offline resilience into every module—making NAFA not just a tool, but a companion.
-
-== Tech Stack
-
-[cols="1,3", options="header"]
-|===
-|Layer |Technology
-
-|*Runtime*
-|Deno – secure, modern JavaScript/TypeScript runtime
-
-|*Client Logic*
-|ReScript – type-safe, compiles to clean JavaScript, TEA pattern
-
-|*Server*
-|Deno HTTP – REST API with JSON responses
-
-|*Mobile*
-|Tauri 2.0 – Rust backend + web UI (iOS/Android)
-
-|*Desktop*
-|Tauri 2.0 – native performance, no Electron bloat
-
-|*Configuration*
-|Nickel – typed configuration language for badge logic
+// SPDX-License-Identifier: PMPL-1.0-or-later
 
-|*Routing Data*
-|GraphHopper + OpenStreetMap (planned)
-|===
+image:https://img.shields.io/badge/status-experimental-orange[Status]
+image:https://img.shields.io/badge/focus-ambient--computing-blue[Focus]
+image:https://img.shields.io/badge/goal-serenity-green[Goal]
+image:https://api.thegreenwebfoundation.org/greencheckimage/jewell.nexus[Green Hosting,link="https://www.thegreenwebfoundation.org/green-web-check/?url=jewell.nexus"]
 
-=== Language Policy
+**NAFA** is an experiment in ambient computing as lived experience.
 
-Following the https://hyperpolymath.org[Hyperpolymath Standard]:
+It is not a product.
+It is not a framework.
 
-[cols="1,1", options="header"]
-|===
-|Allowed |Banned
+It is an attempt to understand:
 
-|ReScript, Rust, Deno, Gleam
-|TypeScript, Node.js, npm, Go
+---
 
-|JavaScript (Deno APIs only)
-|Python (except SaltStack)
+What it would mean for systems to make life feel calmer instead of louder.
 
-|Tauri 2.0, Dioxus (mobile)
-|Kotlin, Swift, React Native, Flutter
-|===
+---
 
-== Features
+---
 
-=== MVP (Complete)
+== What NAFA is
 
-* *Journey Planning* – Sensory-aware route segments with warnings
-* *Sensory Annotations* – Crowdsourced location data (noise/light/crowd levels)
-* *Accessibility Settings* – Text size, contrast, motion, haptics, screen reader support
-* *Offline Mode* – Cached journeys, sync status, works without internet
+NAFA is an exploration of **environment-first computing**.
 
-=== Planned
+Instead of focusing on:
 
-* Real-time routing integration
-* Tauri mobile apps (iOS/Android)
-* Haptic feedback via Rust/Tauri plugins
-* AR overlays for calm zone detection
-* Biometric sensing via wearable integration
+* interfaces
+* commands
+* workflows
 
-== Project Structure
+It focuses on:
 
-[source]
-----
-nafa-app/
-├── client/                    # ReScript SPA (TEA pattern)
-│   ├── src/
-│   │   ├── Main.res          # App entry point
-│   │   └── Page/
-│   │       ├── JourneyView.res
-│   │       ├── Annotate.res
-│   │       ├── Accessibility.res
-│   │       └── Offline.res
-│   └── rescript.json
-│
-├── server/                    # Deno HTTP server
-│   ├── src/
-│   │   ├── main.js           # REST API
-│   │   └── demo.js           # CLI demo
-│   └── deno.json
-│
-├── shared/                    # Shared domain types
-│   ├── src/
-│   │   ├── Domain.res        # Core types
-│   │   └── Route.res         # Type-safe routing
-│   └── rescript.json
-│
-├── nickel-rituals/            # Badge/tier configuration
-│   ├── badge.ncl
-│   └── tier.ncl
-│
-├── scripts/                   # Build automation
-├── Justfile                   # Task runner
-├── Containerfile              # Deno container build
-└── PLAN.adoc                  # Migration roadmap
-----
+* experience
+* movement
+* cognitive load
+* the environment in which interaction happens
 
-== Quick Start
+---
 
-[source,bash]
-----
-# Run the CLI demo (shows all features)
-just mvp-demo
+== Why this exists
 
-# Start the API server
-just mvp-server
+Modern systems optimise interaction.
 
-# Development mode with watch
-just mvp-dev
-----
+They become:
 
-=== Requirements
+* faster
+* more capable
+* more feature-rich
 
-* https://deno.land[Deno] 2.1+
-* https://just.systems[just] (task runner)
+But they also become:
 
-== Mobile Strategy
+* noisier
+* more demanding
+* more interrupt-driven
 
-NAFA uses *Rust-first mobile development* via:
+For many people — especially neurodivergent individuals — this leads to:
 
-=== Tauri 2.0
+* overload
+* fragmentation
+* exhaustion
 
-* Web UI (ReScript) + Rust backend
-* Single codebase for iOS, Android, desktop
-* Native performance, minimal bundle size
-* MIT/Apache-2.0 licensed, no Big Tech dependencies
+The issue is not lack of capability.
 
-=== Dioxus (Alternative)
+It is that **too much reaches the surface**.
 
-* Pure Rust with React-like syntax
-* Native UI components
-* WASM support for web
+---
 
-Both approaches avoid Kotlin/Swift entirely, keeping the stack unified around Rust.
+== The premise
 
-== Ambient Extensions
+NAFA explores a different direction:
 
-NAFA is designed to interoperate with sensory hardware:
+---
 
-* *Haptic Feedback* – Via Rust/Tauri plugins to device APIs
-* *Visual Overlays* – AR glasses integration (future)
-* *BLE Beacons* – Calm zone detection
-* *Wearables* – Heart rate, stress indicators
+The system should not demand attention unless it truly needs it.
 
-All integrations use Rust for the native layer, exposed to the ReScript UI via Tauri commands.
+---
 
-== Contributor Tiers
+Not invisible.
+Not absent.
 
-NAFA uses symbolic badge logic to recognise contributors:
+But **quiet**.
 
-[cols="1,3"]
-|===
-|Badge |Criteria
+---
 
-|*Initiate*
-|First calm journey completed
+== What “ambient” means here
 
-|*Curator*
-|Contributed sensory annotation
+Ambient computing is often described in terms of devices and infrastructure.
 
-|*Guardian*
-|Tested emergency fallback features
+That is not the focus here.
 
-|*Companion*
-|Assisted others in sensory-rich zones
-|===
+In NAFA, ambient means:
 
-Badge logic is defined in `nickel-rituals/badge.ncl`.
+* support without interruption
+* guidance without instruction
+* adaptation without announcement
+* presence without pressure
 
-== API Endpoints
+---
 
-[cols="1,1,2", options="header"]
-|===
-|Method |Path |Description
+== The setting
 
-|GET
-|`/api/journey/:id`
-|Retrieve journey by ID
+This is grounded in a real-world challenge:
 
-|GET
-|`/api/annotations`
-|List all sensory annotations
+---
 
-|POST
-|`/api/annotation`
-|Create new annotation
-|===
+Moving through London during the day.
 
-== Development
+---
 
-=== Build Commands
+* crowds
+* noise
+* unpredictability
+* constant sensory input
 
-[source,bash]
-----
-just mvp-demo      # Run CLI demo
-just mvp-server    # Start server on :8080
-just mvp-dev       # Server with --watch
-just mvp-build     # Build ReScript modules
-just mvp-check     # Type-check server files
-----
+NAFA treats this as a test environment.
 
-=== Container Build
+The question is:
 
-[source,bash]
-----
-podman build -f Containerfile -t nafa:latest .
-podman run -p 8080:8080 nafa:latest
-----
+Can systems make this experience:
 
-== Licensing
+* smoother
+* calmer
+* less cognitively expensive
+* more navigable
 
-NAFA is licensed under *PMPL-1.0-or-later* (Palimpsest-MPL License 1.0 or later).
+---
 
-All source files include SPDX license headers: `SPDX-License-Identifier: PMPL-1.0-or-later`
+== The aim
 
-== Links
+Not productivity.
+Not optimisation.
 
-* Project: https://github.com/hyperpolymath/nafa-app
-* Issues: https://github.com/hyperpolymath/nafa-app/issues
-* Hyperpolymath: https://hyperpolymath.org
+---
 
-== Join the Journey
+Serenity.
 
-NAFA is a living project. Every commit, annotation, and accessibility improvement is a step toward calmer, more inclusive travel.
+---
 
-Contributions welcome -- see link:CONTRIBUTING.adoc[CONTRIBUTING.adoc].
+* fewer decisions
+* less friction
+* more flow
+* more presence
 
+---
 
-== Architecture
+== The key idea: silence
 
-See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.
+Silence does not mean nothing is happening.
+
+It means:
+
+---
+
+Nothing unnecessary is reaching you.
+
+---
+
+If the system is constantly visible, it is failing.
+
+If you are thinking about the system, it is too loud.
+
+---
+
+== Relationship to PanLL
+
+NAFA is the environment.
+
+PanLL is one of the tools used within that environment.
+
+PanLL reduces friction.
+
+NAFA asks:
+
+---
+
+What should life feel like when that friction is reduced?
+
+---
+
+Without PanLL, NAFA remains conceptual.
+Without NAFA, PanLL becomes just another tool.
+
+---
+
+== What this is (and isn’t)
+
+This is:
+
+* an experiment
+* a learning process
+* a set of lived trials
+* a way of understanding ambient systems through use
+
+This is not:
+
+* a finished system
+* a polished product
+* a complete architecture
+
+---
+
+== What to look for
+
+If NAFA is working, you should notice:
+
+* fewer interruptions
+* fewer explicit decisions
+* smoother transitions between tasks
+* reduced mental strain
+* less awareness of “using a system”
+
+---
+
+== Status
+
+Early, exploratory, ongoing.
+
+The point is not to finish quickly.
+The point is to understand what works.
+
+---
+
+== One line summary
+
+---
+
+NAFA is an experiment in making complex environments feel calm.
+
+---
