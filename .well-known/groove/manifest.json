@@ -4,12 +4,12 @@
     "team"
   ],
   "capabilities": {
-    "primary": {
-      "description": "TODO: describe this service's primary capability",
+    "cli": {
+      "description": "Environment-first computing exploration focused on calm, ambient system interaction.",
       "panel_compatible": true,
       "protocol": "cli",
       "requires_auth": false,
-      "type": "custom"
+      "type": "cli"
     }
   },
   "consumes": [],
