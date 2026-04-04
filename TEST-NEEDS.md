@@ -263,3 +263,19 @@ These tests integrate with:
 **Created:** 2026-04-04 by Claude (Haiku 4.5)  
 **License:** SPDX-License-Identifier: PMPL-1.0-or-later  
 **Author:** Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+
+## Session 9 additions (2026-04-04)
+
+### What Was Added
+
+| Area | Tests Added | Location |
+|------|-------------|----------|
+| E2E tests | 7 sections: project structure, Domain.res type completeness (sensoryProfile, journeySegment, transportMode), live Deno API: health/GET journeys/GET journey-by-id/POST annotations/400 validation | `tests/e2e.sh` |
+| CI runner | GitHub Actions workflow for E2E suite | `.github/workflows/e2e.yml` |
+
+### Updated Test Counts
+
+| Suite | Count | Status |
+|-------|-------|--------|
+| E2E (shell-based) | 7 test sections | All passing |
+| CI workflows | 21 | Running tests on GitHub Actions |
