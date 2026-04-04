@@ -1,24 +1,159 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
-= NAFA – Neurodiverse App for Adventurers — Show Me The Receipts
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+= NAFA: Ambient Computing for Neurodiverse Adventurers — Show Me The Receipts
 :toc:
 :icons: font
 
-The README makes claims. This file backs them up.
+The README makes claims. This file backs them up. NAFA is explicitly experimental
+and its README is intentionally philosophy-forward rather than feature-forward.
+This document maps what exists on disk to what the README is reaching toward.
+
+== Claim: An experiment in ambient computing as lived experience
 
 [quote, README]
 ____
-NAFA is a journey planning app designed to help neurodiverse adventurers navigate public transport and sensory-rich environments with calm, confidence, and symbolic clarity.
+NAFA is an experiment in ambient computing as lived experience. It is not a
+product. It is not a framework. It is an attempt to understand what it would
+mean for systems to make life feel calmer instead of louder.
 ____
 
-== File Map
+The current repository is a ReScript client application (`client/`) paired with
+a Nickel configuration layer (`nickel-rituals/`). The client entry point is
+`client/src/Main.res`, which renders a page-based ReScript application.
+`client/src/Page/` contains the individual view modules. The `nickel-rituals/`
+directory holds badge and tier configuration (`badge.ncl`, `tier.ncl`) and a
+`splash-graph/` for visual onboarding design. The README's description of
+"ambient computing" maps to a design intention: the UI is intended to be passive
+and non-demanding rather than action-oriented. The technical realisation is
+early: the client and config layer are scaffolded but not yet connected to live
+sensor or routing data.
+
+**Caveat:** The application is explicitly pre-product. There is no backend
+wired, no PanLL panel integration yet active, and no persistent state store.
+The README's philosophical framing is the most complete artefact; the code
+is an architectural skeleton. Do not judge maturity by the README's ambition —
+judge it by the current client directory.
+
+- Implementation: `client/src/Main.res`, `client/src/Page/`
+- Config: `nickel-rituals/badge.ncl`, `nickel-rituals/tier.ncl`
+- Build: `client/rescript.json` (ReScript), `deno.json` (Deno runtime)
+
+== Claim: Relationship to PanLL — environment versus tool
+
+[quote, README]
+____
+NAFA is the environment. PanLL is one of the tools used within that environment.
+Without PanLL, NAFA remains conceptual. Without NAFA, PanLL becomes just another tool.
+____
+
+This claim defines a forward integration contract rather than a current
+implementation. PanLL (the panel-based UI framework at
+https://github.com/hyperpolymath/panll[panll]) is intended to provide the
+interaction surface inside NAFA's low-stimulus wrapper. The `nickel-rituals/`
+directory shows early work on a tier/badge configuration that would govern
+how much UI surface is shown at any time — a concrete encoding of "nothing
+unnecessary is reaching you." The `splash-graph/` subdirectory sketches
+the visual grammar for initial onboarding.
+
+**Caveat:** The PanLL integration is a design intention. No panel manifest
+or harness wiring exists in this repository yet. The `selur-compose.toml`
+and `Containerfile` at the root show infrastructure readiness but no
+running service.
+
+- PanLL: https://github.com/hyperpolymath/panll
+- Config tier design: `nickel-rituals/tier.ncl`
+- Onboarding sketch: `nickel-rituals/splash-graph/`
+
+== Dogfooded Across The Account
 
 [cols="1,2"]
 |===
-| Path | What's There
+| Technology | Also Used In
 
-| `test(s)/` | Test suite
+| **ReScript** | Primary application language across the account; also in
+  https://github.com/hyperpolymath/idaptik[idaptik] (game UI),
+  https://github.com/hyperpolymath/gossamer[gossamer] (window manager),
+  https://github.com/hyperpolymath/panll[panll] (panel framework)
+| **Nickel configuration** | https://github.com/hyperpolymath/awesome-nickel[awesome-nickel],
+  https://github.com/hyperpolymath/bofig[bofig],
+  https://github.com/hyperpolymath/project-wharf[project-wharf] policy files,
+  https://github.com/hyperpolymath/developer-ecosystem[developer-ecosystem]
+| **Deno runtime** | Replaces Node/npm throughout the account; also in
+  https://github.com/hyperpolymath/gossamer[gossamer],
+  https://github.com/hyperpolymath/panll[panll],
+  https://github.com/hyperpolymath/boj-server[boj-server]
+| **Chainguard / Containerfile** | Container hardening policy applied account-wide;
+  see https://github.com/hyperpolymath/burble[burble],
+  https://github.com/hyperpolymath/project-wharf[project-wharf],
+  https://github.com/hyperpolymath/stapeln[stapeln]
 |===
 
-== Questions?
+== File Map
 
-Open an issue or reach out directly — happy to explain anything in more detail.
+[cols="1,3"]
+|===
+| Path | What's There
+
+| `client/rescript.json`
+| ReScript project configuration. Defines module structure and compilation targets.
+
+| `client/src/Main.res`
+| Application entry point. Sets up the page router and top-level state.
+
+| `client/src/Page/`
+| Individual page-view modules. Each page corresponds to a distinct cognitive
+  context in the journey (onboarding, navigation, rest, etc.).
+
+| `nickel-rituals/badge.ncl`
+| Nickel configuration for badge display rules — which status indicators surface
+  and under what conditions.
+
+| `nickel-rituals/tier.ncl`
+| Tier configuration: defines the information density levels available to the
+  user. Core to the "ambient" design principle.
+
+| `nickel-rituals/splash-graph/`
+| Visual grammar sketches for the onboarding flow.
+
+| `Containerfile`
+| Chainguard-based container definition for the client service.
+
+| `selur-compose.toml`
+| Selur (hyperpolymath container orchestrator) composition spec.
+
+| `PLAN.adoc`
+| Technical development plan with phased milestones.
+
+| `INSTRUCTIONS.md`
+| Developer setup instructions.
+
+| `.machine_readable/6a2/`
+| A2ML checkpoint files: STATE, META, ECOSYSTEM, AGENTIC, NEUROSYM, PLAYBOOK.
+|===
+
+== Checking It
+
+[source,bash]
+----
+# Install ReScript toolchain (via Deno)
+cd client && deno task install
+
+# Build client
+deno task build
+
+# Run development server
+deno task dev
+
+# Nickel config validation
+nickel export nickel-rituals/tier.ncl
+----
+
+== Honest Status Summary
+
+NAFA is a concept-first project at early scaffolding stage. The README's
+philosophical framing is intentional and accurate: this is research-in-progress
+on ambient computing for neurodivergent users, grounded in the specific
+challenge of navigating London. The ReScript client and Nickel config layer
+are architectural foundations rather than a shippable product. External
+reviewers should read `PLAN.adoc` alongside this document to understand
+the intended trajectory.
