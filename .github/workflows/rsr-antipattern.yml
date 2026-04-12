@@ -29,7 +29,8 @@ jobs:
         run: |
           # Exclude bindings/deno/ - those are Deno FFI files using Deno.dlopen, not plain TypeScript
           # Exclude .d.ts files - those are TypeScript type declarations for ReScript FFI
-          TS_FILES=$(find . \( -name "*.ts" -o -name "*.tsx" \) | grep -v node_modules | grep -v 'bindings/deno' | grep -v '\.d\.ts$' || true)
+          # Exclude server/tests/ and server/benches/ - Deno test runner files (not production TS)
+          TS_FILES=$(find . \( -name "*.ts" -o -name "*.tsx" \) | grep -v node_modules | grep -v 'bindings/deno' | grep -v '\.d\.ts$' | grep -v 'server/tests' | grep -v 'server/benches' || true)
           if [ -n "$TS_FILES" ]; then
             echo "❌ TypeScript files detected - use ReScript instead"
             echo "$TS_FILES"
