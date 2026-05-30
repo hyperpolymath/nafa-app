@@ -1,0 +1,210 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+//
+// helpers_test.affine — AffineScript port of server/tests/unit/helpers_test.ts.
+//
+// Step 2 of the estate-wide TypeScript -> AffineScript migration campaign
+// (hyperpolymath/standards#239 umbrella, #241 TAIL BATCH 1).
+//
+// Port shape decisions
+// --------------------
+// 1. `Deno.test` has no Deno-ESM extern lowering today, so the suite
+//    runs as a sequential `main()` driver that panics on first failure
+//    (matches the seed standards#311 + session-sentinel#25 +
+//    tropical-resource-typing#15 ports). A non-zero exit code = test
+//    failure.
+//
+// 2. The TS source's `level: number` is split into Int (validity range)
+//    and `validateSensoryProfile(profile: unknown)` is replaced with
+//    `validateSensoryProfile(p: SensoryProfile)` against a typed record.
+//    The four TS test cases that exercise *dynamic* typing in JS
+//    (`isValidSensoryLevel(5.5)`, `isValidSensoryLevel("5")`,
+//    `validateSensoryProfile(null)`, mistyped object fields) are NOT
+//    portable: the AffineScript type system rejects the call at
+//    compile-time rather than the runtime. Coverage is therefore
+//    *stronger* than the TS — the compiler enforces what the TS
+//    needed runtime guards for. The dropped cases are documented in
+//    the PR body.
+//
+// 3. `Record<string, number>` parameter shape in `exceedsProfile` maps
+//    to the same `SensoryProfile` record (3 fixed dimensions).
+//    Generalisation to arbitrary string-keyed dicts is a separate
+//    stdlib question (Dict / Map binding — not yet pub in AS).
+
+use Deno::{ consoleError, exit };
+
+// --- Helper functions (ported from domain logic) ---
+
+fn sensoryLevelDescription(level: Int) -> String {
+  if (level <= 2) { return "Very Low"; }
+  if (level <= 4) { return "Low"; }
+  if (level <= 6) { return "Moderate"; }
+  if (level <= 8) { return "High"; }
+  return "Very High";
+}
+
+fn isValidSensoryLevel(level: Int) -> Bool {
+  return level >= 0 && level <= 10;
+}
+
+type SensoryProfile = {
+  noise: Int,
+  light: Int,
+  crowd: Int
+}
+
+fn validateSensoryProfile(p: SensoryProfile) -> Bool {
+  return isValidSensoryLevel(p.noise)
+      && isValidSensoryLevel(p.light)
+      && isValidSensoryLevel(p.crowd);
+}
+
+fn exceedsProfile(levels: SensoryProfile, profile: SensoryProfile) -> Bool {
+  return levels.noise > profile.noise
+      || levels.light > profile.light
+      || levels.crowd > profile.crowd;
+}
+
+// --- Assertion helpers ---
+
+fn assert_eq_str(actual: String, expected: String, message: String) -> Int {
+  if (actual != expected) {
+    let _id0 = consoleError("FAIL: " ++ message ++ " — expected '" ++ expected ++ "', got '" ++ actual ++ "'");
+    return exit(1);
+  }
+  return 0;
+}
+
+fn assert_true(condition: Bool, message: String) -> Int {
+  if (!condition) {
+    let _id1 = consoleError("FAIL: " ++ message);
+    return exit(1);
+  }
+  return 0;
+}
+
+fn assert_false(condition: Bool, message: String) -> Int {
+  if (condition) {
+    let _id2 = consoleError("FAIL (expected false): " ++ message);
+    return exit(1);
+  }
+  return 0;
+}
+
+// --- Test cases (mirror Deno.test names from helpers_test.ts) ---
+
+fn test_sensory_very_low() -> Int {
+  let _id3 = assert_eq_str(sensoryLevelDescription(0), "Very Low", "sensoryLevelDescription: 0 -> Very Low");
+  let _id4 = assert_eq_str(sensoryLevelDescription(1), "Very Low", "sensoryLevelDescription: 1 -> Very Low");
+  let _id5 = assert_eq_str(sensoryLevelDescription(2), "Very Low", "sensoryLevelDescription: 2 -> Very Low");
+  return 0;
+}
+
+fn test_sensory_low() -> Int {
+  let _id6 = assert_eq_str(sensoryLevelDescription(3), "Low", "sensoryLevelDescription: 3 -> Low");
+  let _id7 = assert_eq_str(sensoryLevelDescription(4), "Low", "sensoryLevelDescription: 4 -> Low");
+  return 0;
+}
+
+fn test_sensory_moderate() -> Int {
+  let _id8 = assert_eq_str(sensoryLevelDescription(5), "Moderate", "sensoryLevelDescription: 5 -> Moderate");
+  let _id9 = assert_eq_str(sensoryLevelDescription(6), "Moderate", "sensoryLevelDescription: 6 -> Moderate");
+  return 0;
+}
+
+fn test_sensory_high() -> Int {
+  let _id10 = assert_eq_str(sensoryLevelDescription(7), "High", "sensoryLevelDescription: 7 -> High");
+  let _id11 = assert_eq_str(sensoryLevelDescription(8), "High", "sensoryLevelDescription: 8 -> High");
+  return 0;
+}
+
+fn test_sensory_very_high() -> Int {
+  let _id12 = assert_eq_str(sensoryLevelDescription(9), "Very High", "sensoryLevelDescription: 9 -> Very High");
+  let _id13 = assert_eq_str(sensoryLevelDescription(10), "Very High", "sensoryLevelDescription: 10 -> Very High");
+  return 0;
+}
+
+fn test_valid_level_accepts() -> Int {
+  let _id14 = assert_true(isValidSensoryLevel(0), "isValidSensoryLevel accepts 0");
+  let _id15 = assert_true(isValidSensoryLevel(5), "isValidSensoryLevel accepts 5");
+  let _id16 = assert_true(isValidSensoryLevel(10), "isValidSensoryLevel accepts 10");
+  return 0;
+}
+
+fn test_valid_level_rejects_negative() -> Int {
+  let _id17 = assert_false(isValidSensoryLevel(0 - 1), "isValidSensoryLevel rejects -1");
+  return 0;
+}
+
+fn test_valid_level_rejects_above_10() -> Int {
+  let _id18 = assert_false(isValidSensoryLevel(11), "isValidSensoryLevel rejects 11");
+  return 0;
+}
+
+fn test_validate_accepts_valid() -> Int {
+  let p = #{ noise: 5, light: 6, crowd: 4 };
+  let _id19 = assert_true(validateSensoryProfile(p), "validateSensoryProfile accepts {5,6,4}");
+  return 0;
+}
+
+fn test_validate_rejects_invalid_noise() -> Int {
+  let p = #{ noise: 11, light: 5, crowd: 5 };
+  let _id20 = assert_false(validateSensoryProfile(p), "validateSensoryProfile rejects noise=11");
+  return 0;
+}
+
+fn test_validate_rejects_negative_light() -> Int {
+  let p = #{ noise: 5, light: 0 - 1, crowd: 5 };
+  let _id21 = assert_false(validateSensoryProfile(p), "validateSensoryProfile rejects light=-1");
+  return 0;
+}
+
+fn test_exceeds_returns_true_when_exceeded() -> Int {
+  let levels  = #{ noise: 7, light: 6, crowd: 5 };
+  let profile = #{ noise: 6, light: 5, crowd: 5 };
+  let _id22 = assert_true(exceedsProfile(levels, profile), "exceedsProfile: levels exceed");
+  return 0;
+}
+
+fn test_exceeds_returns_false_when_within() -> Int {
+  let levels  = #{ noise: 5, light: 4, crowd: 3 };
+  let profile = #{ noise: 6, light: 5, crowd: 5 };
+  let _id23 = assert_false(exceedsProfile(levels, profile), "exceedsProfile: levels within");
+  return 0;
+}
+
+fn test_exceeds_returns_false_when_equal() -> Int {
+  let levels  = #{ noise: 5, light: 5, crowd: 5 };
+  let profile = #{ noise: 5, light: 5, crowd: 5 };
+  let _id24 = assert_false(exceedsProfile(levels, profile), "exceedsProfile: levels equal profile");
+  return 0;
+}
+
+fn test_exceeds_returns_true_when_any_exceeds() -> Int {
+  let levels  = #{ noise: 4, light: 4, crowd: 6 };
+  let profile = #{ noise: 5, light: 5, crowd: 5 };
+  let _id25 = assert_true(exceedsProfile(levels, profile), "exceedsProfile: crowd exceeds");
+  return 0;
+}
+
+// --- Test driver ---
+
+pub fn main() -> Int {
+  let _id26 = test_sensory_very_low();
+  let _id27 = test_sensory_low();
+  let _id28 = test_sensory_moderate();
+  let _id29 = test_sensory_high();
+  let _id30 = test_sensory_very_high();
+  let _id31 = test_valid_level_accepts();
+  let _id32 = test_valid_level_rejects_negative();
+  let _id33 = test_valid_level_rejects_above_10();
+  let _id34 = test_validate_accepts_valid();
+  let _id35 = test_validate_rejects_invalid_noise();
+  let _id36 = test_validate_rejects_negative_light();
+  let _id37 = test_exceeds_returns_true_when_exceeded();
+  let _id38 = test_exceeds_returns_false_when_within();
+  let _id39 = test_exceeds_returns_false_when_equal();
+  let _id40 = test_exceeds_returns_true_when_any_exceeds();
+  println("OK: 15 helper tests passed");
+  return 0;
+}
