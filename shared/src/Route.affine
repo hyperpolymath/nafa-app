@@ -1,0 +1,59 @@
+// SPDX-License-Identifier: MPL-2.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+//
+// ReScript→AffineScript port of shared/src/Route.res.
+// Refs hyperpolymath/standards#252 STEP 5 (tail batch); Refs affinescript#406.
+
+module Route;
+
+use string::{ split };
+use alib::{ filter };
+
+/// Application routes
+pub type T = Home | JourneyView(String) | JourneyList | Annotate(String) | Accessibility | Offline | NotFound
+
+/// Parse URL path to route
+pub fn fromPath(path: String) -> T {
+  let raw = split(path, "/");
+  let segments = filter(raw, |s| s != "");
+  let n = len(segments);
+  if n == 0 {
+    Home
+  } else if n == 1 {
+    let head = segments[0];
+    if head == "journeys" {
+      JourneyList
+    } else if head == "accessibility" {
+      Accessibility
+    } else if head == "offline" {
+      Offline
+    } else {
+      NotFound
+    }
+  } else if n == 2 {
+    let head = segments[0];
+    let id = segments[1];
+    if head == "journey" {
+      JourneyView(id)
+    } else if head == "annotate" {
+      Annotate(id)
+    } else {
+      NotFound
+    }
+  } else {
+    NotFound
+  }
+}
+
+/// Convert route to URL path
+pub fn toPath(route: T) -> String {
+  match route {
+    Home => "/",
+    JourneyList => "/journeys",
+    JourneyView(id) => "/journey/" ++ id,
+    Annotate(locationId) => "/annotate/" ++ locationId,
+    Accessibility => "/accessibility",
+    Offline => "/offline",
+    NotFound => "/404"
+  }
+}
