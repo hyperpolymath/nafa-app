@@ -1,0 +1,277 @@
+// SPDX-License-Identifier: MPL-2.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+//
+// ReScript→AffineScript port of shared/src/Domain.res.
+// Refs hyperpolymath/standards#252 STEP 5 (tail batch); Refs affinescript#406.
+//
+// Constructor renames vs. the .res original (AS forbids cross-type duplicate
+// constructor names within a module, including collision with prelude
+// constructors brought in by `use`):
+//   contrastMode.Standard          → ContrastStandard
+//   screenReaderVerbosity.Standard → VerbosityStandard
+//   hapticPreference.Standard      → HapticStandard
+//   motionPreference.None          → NoMotion          (collides with prelude::Option::None)
+// All other names preserved.
+
+module Domain;
+
+use prelude::{ Option, Some, None };
+
+// ============================================================================
+// SENSORY
+// ============================================================================
+
+/// Sensory intensity level (0-10 scale)
+pub type SensoryLevel = Int
+
+/// User's sensory sensitivity profile
+pub struct SensoryProfile {
+  noise: SensoryLevel,
+  light: SensoryLevel,
+  crowd: SensoryLevel
+}
+
+/// A sensory annotation for a specific location
+pub struct SensoryAnnotation {
+  id: String,
+  locationId: String,
+  locationName: String,
+  noise: SensoryLevel,
+  light: SensoryLevel,
+  crowd: SensoryLevel,
+  notes: Option<String>,
+  timestamp: Float
+}
+
+// ============================================================================
+// JOURNEY
+// ============================================================================
+
+/// Transport mode for a journey segment
+pub type TransportMode = Walk | Bus | Train | Tram | Metro
+
+/// A single segment of a journey
+pub struct JourneySegment {
+  id: String,
+  transportMode: TransportMode,
+  fromLocation: String,
+  toLocation: String,
+  durationMinutes: Int,
+  sensoryWarning: Option<String>,
+  sensoryLevels: Option<SensoryProfile>
+}
+
+/// Status of a journey
+pub type JourneyStatus = Planning | Active | Paused | Completed
+
+/// A complete journey plan
+pub struct Journey {
+  id: String,
+  title: String,
+  segments: [JourneySegment],
+  status: JourneyStatus,
+  estimatedMinutes: Int,
+  sensoryAnnotations: [SensoryAnnotation]
+}
+
+/// Convert transport mode to display string
+pub fn transportModeToString(mode: TransportMode) -> String {
+  match mode {
+    Walk => "Walk",
+    Bus => "Bus",
+    Train => "Train",
+    Tram => "Tram",
+    Metro => "Metro"
+  }
+}
+
+/// Convert transport mode to emoji for visual clarity
+pub fn transportModeToEmoji(mode: TransportMode) -> String {
+  match mode {
+    Walk => "🚶",
+    Bus => "🚌",
+    Train => "🚆",
+    Tram => "🚊",
+    Metro => "🚇"
+  }
+}
+
+/// Get sensory level description
+pub fn sensoryLevelDescription(level: SensoryLevel) -> String {
+  if level <= 2 {
+    "Very Low"
+  } else if level <= 4 {
+    "Low"
+  } else if level <= 6 {
+    "Moderate"
+  } else if level <= 8 {
+    "High"
+  } else {
+    "Very High"
+  }
+}
+
+/// Check if sensory levels exceed user's profile tolerance
+pub fn exceedsProfile(levels: SensoryProfile, profile: SensoryProfile) -> Bool {
+  levels.noise > profile.noise || levels.light > profile.light || levels.crowd > profile.crowd
+}
+
+// ============================================================================
+// ACCESSIBILITY
+// ============================================================================
+
+/// Text size preference for readability
+pub type TextSize = Small | Medium | Large | ExtraLarge
+
+/// Color contrast mode
+/// Note: `Standard` renamed to `ContrastStandard` (cross-type collision in AS).
+pub type ContrastMode = ContrastStandard | HighContrast | DarkHighContrast
+
+/// Motion preference for animations
+/// Note: `None` renamed to `NoMotion` (collides with `prelude::Option::None`).
+pub type MotionPreference = Full | Reduced | NoMotion
+
+/// Screen reader verbosity level
+/// Note: `Standard` renamed to `VerbosityStandard` (cross-type collision in AS).
+pub type ScreenReaderVerbosity = Minimal | VerbosityStandard | Verbose
+
+/// Haptic feedback preference
+/// Note: `Standard` renamed to `HapticStandard` (cross-type collision in AS).
+pub type HapticPreference = Off | Subtle | HapticStandard | Strong
+
+/// User accessibility preferences
+pub struct AccessibilityPrefs {
+  textSize: TextSize,
+  contrastMode: ContrastMode,
+  motionPreference: MotionPreference,
+  screenReaderVerbosity: ScreenReaderVerbosity,
+  hapticFeedback: HapticPreference,
+  reduceTransparency: Bool,
+  boldText: Bool,
+  monoAudio: Bool
+}
+
+/// Default accessibility preferences
+pub const defaultAccessibilityPrefs: AccessibilityPrefs = #{
+  textSize: Medium,
+  contrastMode: ContrastStandard,
+  motionPreference: Full,
+  screenReaderVerbosity: VerbosityStandard,
+  hapticFeedback: HapticStandard,
+  reduceTransparency: false,
+  boldText: false,
+  monoAudio: false
+};
+
+/// Get text scale factor from preference
+pub fn textScaleFactor(size: TextSize) -> Float {
+  match size {
+    Small => 0.85,
+    Medium => 1.0,
+    Large => 1.25,
+    ExtraLarge => 1.5
+  }
+}
+
+/// Get accessible label for transport mode (screen reader friendly)
+pub fn transportModeAccessibleLabel(mode: TransportMode) -> String {
+  match mode {
+    Walk => "Walking segment",
+    Bus => "Bus journey",
+    Train => "Train journey",
+    Tram => "Tram journey",
+    Metro => "Metro or underground journey"
+  }
+}
+
+/// Generate screen reader description for a journey segment
+pub fn segmentAccessibleDescription(segment: JourneySegment) -> String {
+  let base = transportModeAccessibleLabel(segment.transportMode) ++ " from " ++ segment.fromLocation ++ " to " ++ segment.toLocation ++ ", taking approximately " ++ int_to_string(segment.durationMinutes) ++ " minutes";
+
+  let warning = match segment.sensoryWarning {
+    Some(w) => ". Warning: " ++ w,
+    None => ""
+  };
+
+  let sensory = match segment.sensoryLevels {
+    Some(levels) => ". Sensory conditions: noise level " ++ sensoryLevelDescription(levels.noise) ++ ", lighting " ++ sensoryLevelDescription(levels.light) ++ ", crowding " ++ sensoryLevelDescription(levels.crowd),
+    None => ""
+  };
+
+  base ++ warning ++ sensory
+}
+
+// ============================================================================
+// OFFLINE MODE
+// ============================================================================
+
+/// Network connectivity status
+pub type ConnectivityStatus = Online | Offline | Connecting | Unstable
+
+/// Sync state for offline data
+pub type SyncStatus = Synced | Pending | Syncing | Conflict | Error(String)
+
+// NOTE: `cached<'a>` and `isCacheStale` deferred — AS today errors with
+// "Too many arguments for kind" on generic record types. Track in
+// follow-up; the .res original keeps the generic version until then.
+
+/// Offline storage stats
+pub struct StorageStats {
+  journeysCached: Int,
+  annotationsCached: Int,
+  pendingUploads: Int,
+  lastSyncAt: Option<Float>,
+  storageBytesUsed: Int
+}
+
+/// Offline mode preferences
+pub struct OfflinePrefs {
+  enableOfflineMode: Bool,
+  autoSync: Bool,
+  syncOnWifiOnly: Bool,
+  maxCacheAgeDays: Int,
+  prefetchUpcomingJourneys: Bool
+}
+
+/// Default offline preferences
+pub const defaultOfflinePrefs: OfflinePrefs = #{
+  enableOfflineMode: true,
+  autoSync: true,
+  syncOnWifiOnly: false,
+  maxCacheAgeDays: 7,
+  prefetchUpcomingJourneys: true
+};
+
+// isCacheStale deferred — depends on generic `Cached<A>`; see note above.
+
+/// Sync status description for UI
+pub fn syncStatusDescription(status: SyncStatus) -> String {
+  match status {
+    Synced => "Up to date",
+    Pending => "Waiting to sync",
+    Syncing => "Syncing...",
+    Conflict => "Sync conflict - review needed",
+    Error(msg) => "Sync error: " ++ msg
+  }
+}
+
+/// Connectivity status for UI
+pub fn connectivityDescription(status: ConnectivityStatus) -> String {
+  match status {
+    Online => "Connected",
+    Offline => "Offline - using cached data",
+    Connecting => "Connecting...",
+    Unstable => "Connection unstable"
+  }
+}
+
+// ============================================================================
+// COMBINED USER PROFILE
+// ============================================================================
+
+/// Complete user preferences including sensory, accessibility, and offline
+pub struct UserPreferences {
+  sensoryProfile: SensoryProfile,
+  accessibilityPrefs: AccessibilityPrefs,
+  offlinePrefs: OfflinePrefs
+}
