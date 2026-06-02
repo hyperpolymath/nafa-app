@@ -3,7 +3,7 @@
 :toc-placement: preamble
 :icons: font
 
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 
 image:https://img.shields.io/badge/status-experimental-orange[Status]
 image:https://img.shields.io/badge/focus-ambient--computing-blue[Focus]

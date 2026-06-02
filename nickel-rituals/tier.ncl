@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # tier.ncl -- NAFA contributor tier definitions
 
 tier "Contributor" requires badge "Initiate"
