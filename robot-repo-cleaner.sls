@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 #
 # Salt State: robot-repo-cleaner
 # Purges all caches and transient data from the development environment.
