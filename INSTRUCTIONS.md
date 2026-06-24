@@ -1,4 +1,4 @@
-<!-- SPDX-License-Identifier: MPL-2.0 -->
+<!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
 # Integration Lessons & Requirements
 
 > Cross-session learning from `sanctify-php` security tools integration.

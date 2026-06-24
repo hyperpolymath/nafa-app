@@ -261,7 +261,7 @@ These tests integrate with:
 ---
 
 **Created:** 2026-04-04 by Claude (Haiku 4.5)  
-**License:** SPDX-License-Identifier: MPL-2.0  
+**License:** SPDX-License-Identifier: CC-BY-SA-4.0  
 **Author:** Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
 ## Session 9 additions (2026-04-04)
