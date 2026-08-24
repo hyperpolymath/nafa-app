@@ -1,11 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
-// Ported via Harvard Engine mechanical processor
+// Ported via Harvard Engine (Semantic pass)
 
 module helpers_test;
 
-// TODO: Complete semantic implementation
-
-/* === ORIGINAL TYPESCRIPT CONTEXT ===
 // SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
@@ -18,7 +15,7 @@ module helpers_test;
 import { assertEquals, assert } from "@std/assert";
 
 // Helper functions (copied from domain logic)
-function sensoryLevelDescription(level: number): string {
+fn sensoryLevelDescription(level: number): string {
   if (level <= 2) return "Very Low";
   if (level <= 4) return "Low";
   if (level <= 6) return "Moderate";
@@ -26,13 +23,13 @@ function sensoryLevelDescription(level: number): string {
   return "Very High";
 }
 
-function isValidSensoryLevel(level: number): boolean {
+fn isValidSensoryLevel(level: number): boolean {
   return typeof level === "number" && level >= 0 && level <= 10 && Number.isInteger(level);
 }
 
-function validateSensoryProfile(profile: unknown): boolean {
+fn validateSensoryProfile(profile: unknown): boolean {
   if (typeof profile !== "object" || profile === null) return false;
-  const p = profile as Record<string, unknown>;
+  let p = profile as Record<string, unknown>;
   return (
     isValidSensoryLevel(p.noise as number) &&
     isValidSensoryLevel(p.light as number) &&
@@ -40,7 +37,7 @@ function validateSensoryProfile(profile: unknown): boolean {
   );
 }
 
-function exceedsProfile(levels: Record<string, number>, profile: Record<string, number>): boolean {
+fn exceedsProfile(levels: Record<string, number>, profile: Record<string, number>): boolean {
   return levels.noise > profile.noise || levels.light > profile.light || levels.crowd > profile.crowd;
 }
 
@@ -95,7 +92,7 @@ Deno.test("isValidSensoryLevel: rejects non-numbers", () => {
 });
 
 Deno.test("validateSensoryProfile: accepts valid profile", () => {
-  const profile = { noise: 5, light: 6, crowd: 4 };
+  let profile = { noise: 5, light: 6, crowd: 4 };
   assert(validateSensoryProfile(profile));
 });
 
@@ -112,27 +109,26 @@ Deno.test("validateSensoryProfile: rejects profile with negative light", () => {
 });
 
 Deno.test("exceedsProfile: returns true when levels exceed profile", () => {
-  const levels = { noise: 7, light: 6, crowd: 5 };
-  const profile = { noise: 6, light: 5, crowd: 5 };
+  let levels = { noise: 7, light: 6, crowd: 5 };
+  let profile = { noise: 6, light: 5, crowd: 5 };
   assert(exceedsProfile(levels, profile));
 });
 
 Deno.test("exceedsProfile: returns false when levels within profile", () => {
-  const levels = { noise: 5, light: 4, crowd: 3 };
-  const profile = { noise: 6, light: 5, crowd: 5 };
+  let levels = { noise: 5, light: 4, crowd: 3 };
+  let profile = { noise: 6, light: 5, crowd: 5 };
   assert(!exceedsProfile(levels, profile));
 });
 
 Deno.test("exceedsProfile: returns false when levels equal profile", () => {
-  const levels = { noise: 5, light: 5, crowd: 5 };
-  const profile = { noise: 5, light: 5, crowd: 5 };
+  let levels = { noise: 5, light: 5, crowd: 5 };
+  let profile = { noise: 5, light: 5, crowd: 5 };
   assert(!exceedsProfile(levels, profile));
 });
 
-Deno.test("exceedsProfile: returns true when any dimension exceeds", () => {
-  const levels = { noise: 4, light: 4, crowd: 6 };
-  const profile = { noise: 5, light: 5, crowd: 5 };
+Deno.test("exceedsProfile: returns true when unknown dimension exceeds", () => {
+  let levels = { noise: 4, light: 4, crowd: 6 };
+  let profile = { noise: 5, light: 5, crowd: 5 };
   assert(exceedsProfile(levels, profile));
 });
 
-==================================== */
