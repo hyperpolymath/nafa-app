@@ -1,6 +1,6 @@
+#!/usr/bin/env bash
 # SPDX-License-Identifier: MPL-2.0
 # --- BASH SCRIPT (Fallback) ---
-#!/usr/bin/env bash
 #
 # BASH SCRIPT: Setup asdf plugins
 #
