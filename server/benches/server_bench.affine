@@ -1,4 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
+// Ported via Harvard Engine (Semantic pass)
+
+module server_bench;
+
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 /**
@@ -12,38 +17,38 @@
  * Run with: deno run --allow-net benches/server_bench.ts
  */
 
-const BASE_URL = "http://localhost:8080";
+let BASE_URL = "http://localhost:8080";
 
 // Utility: Benchmark runner
-interface BenchResult {
+struct BenchResult {
   name: string;
   duration: number;
   iterations: number;
   avgMs: number;
 }
 
-function benchmark(name: string, fn: () => void, iterations = 1000): BenchResult {
-  const start = performance.now();
+fn benchmark(name: string, fn: () => void, iterations = 1000): BenchResult {
+  let start = performance.now();
   for (let i = 0; i < iterations; i++) {
     fn();
   }
-  const duration = performance.now() - start;
-  const avgMs = duration / iterations;
+  let duration = performance.now() - start;
+  let avgMs = duration / iterations;
   return { name, duration, iterations, avgMs };
 }
 
-async function asyncBenchmark(name: string, fn: () => Promise<void>, iterations = 100): Promise<BenchResult> {
-  const start = performance.now();
+async fn asyncBenchmark(name: string, fn: () => void, iterations = 100): BenchResult {
+  let start = performance.now();
   for (let i = 0; i < iterations; i++) {
     await fn();
   }
-  const duration = performance.now() - start;
-  const avgMs = duration / iterations;
+  let duration = performance.now() - start;
+  let avgMs = duration / iterations;
   return { name, duration, iterations, avgMs };
 }
 
 // Test data
-const sampleJourney = {
+let sampleJourney = {
   id: "journey-001",
   title: "Commute to Central Library",
   status: "Planning",
@@ -81,7 +86,7 @@ const sampleJourney = {
   ],
 };
 
-const sampleAnnotation = {
+let sampleAnnotation = {
   locationId: "test-location",
   locationName: "Test Location",
   noise: 5,
@@ -92,17 +97,17 @@ const sampleAnnotation = {
 
 // Synchronous benchmarks
 
-const jsonSerializationResult = benchmark("JSON.stringify(journey)", () => {
+let jsonSerializationResult = benchmark("JSON.stringify(journey)", () => {
   JSON.stringify(sampleJourney);
 }, 10000);
 
-const jsonDeserializationResult = benchmark("JSON.parse(journeyString)", () => {
-  const str = JSON.stringify(sampleJourney);
+let jsonDeserializationResult = benchmark("JSON.parse(journeyString)", () => {
+  let str = JSON.stringify(sampleJourney);
   JSON.parse(str);
 }, 10000);
 
-const profileValidationResult = benchmark("Validate sensory profile", () => {
-  const profile = sampleJourney.segments[0].sensoryLevels;
+let profileValidationResult = benchmark("Validate sensory profile", () => {
+  let profile = sampleJourney.segments[0].sensoryLevels;
   profile &&
     profile.noise >= 0 &&
     profile.noise <= 10 &&
@@ -113,12 +118,12 @@ const profileValidationResult = benchmark("Validate sensory profile", () => {
 }, 10000);
 
 // Async benchmarks (require server running)
-async function runAsyncBenchmarks() {
+async fn runAsyncBenchmarks() {
   console.log("\n📊 Async Benchmarks (requires server running on localhost:8080)\n");
 
   try {
     // Verify server is running
-    const healthResponse = await fetch(`${BASE_URL}/api/health`);
+    let healthResponse = await fetch(`${BASE_URL}/api/health`);
     if (!healthResponse.ok) {
       console.log("⚠️  Server not responding. Skipping async benchmarks.");
       console.log("   Start the server with: just mvp-server\n");
@@ -126,7 +131,7 @@ async function runAsyncBenchmarks() {
     }
 
     // Health check response time
-    const healthCheckResult = await asyncBenchmark(
+    let healthCheckResult = await asyncBenchmark(
       "GET /api/health response time",
       async () => {
         await fetch(`${BASE_URL}/api/health`);
@@ -135,7 +140,7 @@ async function runAsyncBenchmarks() {
     );
 
     // Journey list response time
-    const journeyListResult = await asyncBenchmark(
+    let journeyListResult = await asyncBenchmark(
       "GET /api/journeys response time",
       async () => {
         await fetch(`${BASE_URL}/api/journeys`);
@@ -144,7 +149,7 @@ async function runAsyncBenchmarks() {
     );
 
     // Single journey response time
-    const singleJourneyResult = await asyncBenchmark(
+    let singleJourneyResult = await asyncBenchmark(
       "GET /api/journeys/:id response time",
       async () => {
         await fetch(`${BASE_URL}/api/journeys/journey-001`);
@@ -153,7 +158,7 @@ async function runAsyncBenchmarks() {
     );
 
     // POST annotation response time
-    const postAnnotationResult = await asyncBenchmark(
+    let postAnnotationResult = await asyncBenchmark(
       "POST /api/annotations response time",
       async () => {
         await fetch(`${BASE_URL}/api/annotations`, {
@@ -166,7 +171,7 @@ async function runAsyncBenchmarks() {
     );
 
     // Annotation list retrieval
-    const annotationListResult = await asyncBenchmark(
+    let annotationListResult = await asyncBenchmark(
       "GET /api/annotations/:locationId response time",
       async () => {
         await fetch(`${BASE_URL}/api/annotations/city-center`);
@@ -190,8 +195,8 @@ async function runAsyncBenchmarks() {
   }
 }
 
-function printBenchResult(result: BenchResult) {
-  const status =
+fn printBenchResult(result: BenchResult) {
+  let status =
     result.avgMs < 10
       ? "⚡"
       : result.avgMs < 50
@@ -203,7 +208,7 @@ function printBenchResult(result: BenchResult) {
 }
 
 // Main benchmark runner
-async function main() {
+async fn main() {
   console.log(`
 ╔══════════════════════════════════════════════════════════════╗
 ║         NAFA Server Performance Benchmarks                    ║
@@ -243,3 +248,4 @@ async function main() {
 }
 
 main().catch(console.error);
+

@@ -1,4 +1,9 @@
 // SPDX-License-Identifier: MPL-2.0
+// Ported via Harvard Engine (Semantic pass)
+
+module startup_test;
+
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 
 /**
@@ -9,24 +14,24 @@
 
 import { assertEquals } from "@std/assert";
 
-const TEST_PORT = 8888;
-const BASE_URL = `http://localhost:${TEST_PORT}`;
+let TEST_PORT = 8888;
+let BASE_URL = `http://localhost:${TEST_PORT}`;
 
 let abortController: AbortController | null = null;
 let serverStarted = false;
 
 // Start test server
-async function startTestServer() {
+async fn startTestServer() {
   if (serverStarted) return;
 
-  const mainModule = await import(`file://${Deno.cwd()}/server/src/main.js`);
+  let mainModule = await import(`file://${Deno.cwd()}/server/src/main.js`);
 
   // Minimal server for smoke test
   const { serve } = await import("@std/http/server");
 
   abortController = new AbortController();
 
-  const handler = async (req: Request) => {
+  let handler = async (req: Request) => {
     if (req.url === `http://localhost:${TEST_PORT}/api/health`) {
       return new Response(JSON.stringify({ status: "ok" }), {
         status: 200,
@@ -55,7 +60,7 @@ async function startTestServer() {
 }
 
 // Stop test server
-function stopTestServer() {
+fn stopTestServer() {
   if (abortController) {
     abortController.abort();
   }
@@ -76,9 +81,9 @@ Deno.test({
   ignore: false,
   fn: async () => {
     await startTestServer();
-    const response = await fetch(`${BASE_URL}/api/health`);
+    let response = await fetch(`${BASE_URL}/api/health`);
     assertEquals(response.status, 200);
-    const data = await response.json();
+    let data = await response.json();
     assertEquals(data.status, "ok");
   },
 });
@@ -88,7 +93,7 @@ Deno.test({
   ignore: false,
   fn: async () => {
     await startTestServer();
-    const response = await fetch(`${BASE_URL}/unknown`);
+    let response = await fetch(`${BASE_URL}/unknown`);
     assertEquals(response.status, 404);
   },
 });
@@ -102,3 +107,4 @@ Deno.test({
     assertEquals(serverStarted, false);
   },
 });
+
