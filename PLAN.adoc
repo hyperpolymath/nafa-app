@@ -350,4 +350,4 @@ type offlinePrefs = {
 
 * link:README.adoc[Project README]
 * link:INSTRUCTIONS.md[Integration Lessons]
-* link:CONTRIBUTING.md[Contribution Guidelines]
+* link:.github/CONTRIBUTING.md[Contribution Guidelines]
