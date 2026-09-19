@@ -21,7 +21,7 @@ exit 0
 EOF
 
 # --- commit-msg hook (Example for conventional commits) ---
-cat > .githooks/commit-msg << 'EOF'
+cat > .github/hooks/commit-msg << 'EOF'
 #!/usr/bin/env bash
 #
 # commit-msg hook: Enforce conventional commit message format.
