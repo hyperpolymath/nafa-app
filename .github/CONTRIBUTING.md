@@ -54,8 +54,9 @@ just fmt         # auto-format
 just lint        # static checks
 ```
 
-- All commits must be **signed**, with SSH for people (CI enforces; see
-  [standards](https://github.com/hyperpolymath/standards)).
+All commits must be **signed**. The required-signatures rule accepts valid
+signatures; writer configuration specifies SSH signing for people. See the
+  [standards](https://github.com/hyperpolymath/standards).
 
 - All source files must carry an **SPDX-License-Identifier** header (CI
   enforces).
