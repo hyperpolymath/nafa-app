@@ -9,7 +9,8 @@
  * ReScript frontend to visualize cognitive load and environmental intensity.
  */
 
-const PORT = 8080;
+const PORT = Number(Bun.env.PORT ?? 8080);
+const HOST = Bun.env.HOST ?? "localhost";
 
 // DOMAIN MODEL: Sample Journey Data.
 // Represents a multi-segment commute with associated sensory metrics (Noise, Light, Crowds).
@@ -53,7 +54,7 @@ const sampleJourney = {
 };
 
 // Route handler for all API endpoints
-async function handleRequest(req) {
+export async function handleRequest(req) {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   const method = req.method;
   const pathname = url.pathname;
@@ -137,6 +138,9 @@ async function handleRequest(req) {
   });
 }
 
-// Start server using Deno's built-in HTTP server
-console.log(`🚀 NAFA Server starting on http://localhost:${PORT}`);
-Deno.serve({ hostname: "localhost", port: PORT }, handleRequest);
+// Start the server with Bun's built-in HTTP server when run directly
+// (not when imported by the tests).
+if (import.meta.main) {
+  console.log(`🚀 NAFA Server starting on http://${HOST}:${PORT}`);
+  Bun.serve({ hostname: HOST, port: PORT, fetch: handleRequest });
+}

@@ -1,0 +1,1 @@
+{"license":"MPL-2.0","name":"nafa-server","private":true,"scripts":{"start":"bun run src/main.js","test":"bun test tests/"},"type":"module"}
