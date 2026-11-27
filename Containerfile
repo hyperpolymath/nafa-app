@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: MPL-2.0
 # SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
 #
-# === NAFA Containerfile (Deno Runtime) ===
+# === NAFA Containerfile (Bun Runtime) ===
 #
-# Multi-stage build for the NAFA server.
-# Uses Chainguard's Deno image for minimal CVE surface.
+# Runs the NAFA server on Bun.
+# Uses Chainguard's Bun image for minimal CVE surface.
+# The server has no runtime dependencies, so there is no install step.
 #
 # TODO: Migrate to Cerro Torre (hyperpolymath/cerro-torre) when Phase 1
 #       ships with OCI image output. Cerro Torre provides:
@@ -14,9 +15,8 @@
 #       See: https://github.com/hyperpolymath/cerro-torre
 #
 
-# --- Stage 1: Builder ---
-# Chainguard Deno: minimal attack surface, signed images, near-zero CVEs
-FROM cgr.dev/chainguard/deno:latest AS builder
+# Chainguard Bun: minimal attack surface, signed images, near-zero CVEs
+FROM cgr.dev/chainguard/bun:latest AS runtime
 
 WORKDIR /app
 
@@ -24,25 +24,12 @@ WORKDIR /app
 COPY server/ ./server/
 COPY shared/ ./shared/
 
-# Cache dependencies (Deno caches on first run)
-RUN cd server && deno cache src/main.js
-
-# --- Stage 2: Runtime ---
-FROM cgr.dev/chainguard/deno:latest AS runtime
-
-WORKDIR /app
-
-# Copy from builder
-COPY --from=builder /app/server ./server
-COPY --from=builder /app/shared ./shared
-COPY --from=builder /home/nonroot/.cache/deno /home/nonroot/.cache/deno
-
-# Set environment
+# Set environment (listen on all interfaces inside the container)
 ENV PORT=8080
+ENV HOST=0.0.0.0
 
 # Expose the port
 EXPOSE 8080
 
-# Run with minimal permissions
-# Chainguard images run as nonroot by default
-CMD ["run", "--allow-net", "--allow-read", "--allow-env", "server/src/main.js"]
+# Chainguard images run as nonroot by default; the entrypoint is bun
+CMD ["run", "server/src/main.js"]

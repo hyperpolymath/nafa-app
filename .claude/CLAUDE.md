@@ -38,10 +38,7 @@ The following files in `.machine_readable/` contain structured project metadata:
 | Banned | Replacement |
 |--------|-------------|
 | TypeScript | AffineScript |
-| Deno | Bun |
-| Node.js | Bun |
-| npm | Bun |
-| pnpm/yarn | Bun |
+| Node.js, yarn | Bun (then Deno, pnpm, npm as fallbacks) |
 | Go | Rust |
 | Python | Julia/Rust/AffineScript |
 | Java/Kotlin | Rust/Tauri/Dioxus |
