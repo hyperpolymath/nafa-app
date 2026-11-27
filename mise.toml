@@ -27,12 +27,6 @@ gnu-grep = "latest"
 [env]
 # Common environment variables
 
-[tasks.build]
-run = "just build"
-
-[tasks.test]
-run = "just test"
-
 [tasks.lint]
 run = "bun install --frozen-lockfile && bunx --no-install --bun prettier --check ."
 
